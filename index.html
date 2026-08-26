@@ -427,9 +427,12 @@ async function searchData() {
     loading.style.display = 'none';
     searchBtn.disabled = false;
     searchBtn.innerText = '查詢';
-    error.innerText = '網路連線異常或系統無回應，請稍後再試。';
+    
+    // 把真實的錯誤原因印在畫面上
+    error.innerText = '系統連線異常，真實錯誤原因：\n' + err.message;
     error.style.display = 'block';
-    console.error(err);
+    
+    console.error("詳細錯誤：", err);
   }
 }
 </script>
