@@ -195,7 +195,6 @@ button:hover {
   font-weight: bold;
 }
 
-// .stat-value.black { color: #333; }
 .stat-value.pink { color: #ff2b85; }
 
 .date-range {
@@ -213,7 +212,7 @@ button:hover {
 
 .bonus-text {
   text-align: center;
-  color: #555; /* 讓其餘的字變成深灰色 */
+  color: #555;
   font-size: 14px;
   font-weight: bold;
   margin-top: 16px;
@@ -344,28 +343,10 @@ button:disabled {
     <div class="bonus-text" id="bonusText"></div>
   </div>
 
-<!--
-  <div class="notice-section">
-    <h3>📋 注意事項</h3>
-    <ol>
-      <li>查詢器更新時間將於每日下午7點前更新。</li>
-      <li>如有疑問，請透過【接單系統(pandarider)>耳機圖示>幫助：活動/報酬/系統/其他】聯繫客服，類別選擇【活動/點數】-【活動】- 【其他活動】，並於標題說明【閱讀挑戰】。</li>
-      <li>中獎者請詳閱活動辦法並提供收件資料，獎項將以信件或以電話方式通知領取方式。倘寄出之獎項包裹如遭拒收、未領退件，恕不再次補寄。若有不可歸責於foodpanda之事由以致收件資料不全、不符、無法辨識、遺失等情形，恕無法通知補件。</li>
-      <li>依中華民國所得稅法規定，凡機會中獎之獎項價值超過新台幣$1,000元者，所得將列入個人年度綜合所得稅申報。若獎品價值超過新台幣$20,000元者，須繳納10%稅金；不具中華民國身分者或未在中華民國境內居住達183天之本國人，不論中獎金額，須就中獎所得扣獎20%機會中獎稅，然扣繳稅款未超過新台幣$2,000免扣繳（外國人不適用）。稅額以發票金額計算，由foodpanda依法代收，若中獎人未能如期依法繳納應繳稅額或提供相關文件，即視為放棄得獎資格及權益。</li>
-      <li>依據個人資料保護法規定，本活動所蒐集之個人資料，視為活動參加者瞭解及同意 <a href="https://pandarider.foodpanda.com.tw/otherPage/31" target="_blank">foodpanda隱私權政策條款</a>，由foodpanda針對本次活動需求進行蒐集、處理及利用（包含提供給辦理活動之第三方廠商、獎品寄送廠商等），該個人基本資料僅供本次活動使用，絕不作其他用途。</li>
-      <li>除foodpanda自家商品外，所有活動獎項依廠商實際發放現況為準。如對獎品瑕疵有疑義，請逕洽贈品原廠商，foodpanda不負獎品之任何維護或保固等瑕疵擔保責任。</li>
-      <li>foodpanda保留全權處理任何未頒發及未領取獎品之權利。如遇獎品缺貨或其他不可抗力事由以致獎品內容變更，foodpanda保留以其他價值相當之獎品替代原公布獎品之權利，恕不提供獎品轉讓、折現或轉換其他獎品之服務。</li>
-      <li>贈送獎品／電子票券獎品依廠商實際發放為準。</li>
-      <li>得獎者請於領獎申請截止時間內至活動領獎頁面完成領獎步驟，如未能於截止期間完成領獎步驟，視為中獎夥伴放棄領取，不再向 foodpanda 要求補領。</li>
-      <li>如有未盡事宜，依foodpanda最新公告為準。</li>
-    </ol>
-  </div> */
--->
-
 </div>
 
 <script>
-// 👇 替換成你剛剛部署的 Google Apps Script Web App 網址 👇
+// API 網址維持不變
 const API_URL = "https://script.google.com/macros/s/AKfycbwJZfa5GfkDbhRAz66DPVZ5IIrolqS0Ysp5F_zfit__z7yffIcUfoUikTT9Vfz84AlA-A/exec"; 
 
 async function searchData() {
@@ -388,9 +369,19 @@ async function searchData() {
   loading.style.display = 'block';
 
   try {
-    // 向 Apps Script 發送 GET 請求
+    // 1. 向 Apps Script 發送 GET 請求
     const response = await fetch(`${API_URL}?riderId=${riderId}`);
-    const json = await response.json();
+    
+    // 2. ⚡ 關鍵防護：先不要直接轉 JSON，先轉成純文字檢查！
+    const rawText = await response.text();
+    
+    // 3. 如果回傳的內容是 HTML (例如 Google 登入頁面或錯誤頁面)
+    if (rawText.trim().startsWith('<')) {
+      throw new Error("伺服器連線擁擠，請稍後再試！");
+    }
+
+    // 4. 確認是正常的資料後，才解析成 JSON
+    const json = JSON.parse(rawText);
 
     loading.style.display = 'none';
     searchBtn.disabled = false;
@@ -428,8 +419,8 @@ async function searchData() {
     searchBtn.disabled = false;
     searchBtn.innerText = '查詢';
     
-    // 把真實的錯誤原因印在畫面上
-    error.innerText = '系統連線異常，真實錯誤原因：\n' + err.message;
+    // 把錯誤原因印在畫面上 (已過濾掉醜醜的代碼)
+    error.innerText = err.message || '系統連線異常，請重新整理頁面再試一次。';
     error.style.display = 'block';
     
     console.error("詳細錯誤：", err);
