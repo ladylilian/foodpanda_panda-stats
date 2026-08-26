@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base target="_top">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>foodpanda 準時率/超時率查詢器</title>
+
+<style>
+/* ========================= */
+/* GLOBAL & BASE STYLES      */
+/* ========================= */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #f4f6f9;
+  padding: 16px;
+  overflow-wrap: break-word; 
+}
+
+.container {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  background: white;
+  padding: 22px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 25px;
+}
+
+h3 {
+  color: #333;
+}
+
+/* ========================= */
+/* SEARCH BOX                */
+/* ========================= */
+.search-box {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 6px 0 0 6px;
+  max-width: 100%; 
+}
+
+button {
+  padding: 12px 18px;
+  font-size: 16px;
+  background-color: #ff2b85; 
+  color: white;
+  border: none;
+  border-radius: 0 6px 6px 0;
+  cursor: pointer;
+  transition: background-color 0.2s ease; 
+}
+
+button:hover {
+  background-color: #d81a67; 
+}
+
+/* ========================= */
+/* EVENT DETAILS SECTION     */
+/* ========================= */
+.event-section {
+  background-color: rgba(255, 43, 133, 0.08); 
+  border-left: 4px solid #ff2b85; 
+  padding: 20px; 
+  margin-bottom: 30px;
+  border-radius: 0 8px 8px 0;
+}
+
+.event-section h4 {
+  margin-top: 20px;
+  margin-bottom: 8px;
+  color: inherit; 
+  font-size: 16px;
+  display: flex; 
+  align-items: center;
+  gap: 8px; 
+}
+
+.event-section h4:first-of-type {
+  margin-top: 24px;
+}
+
+.event-section p, 
+.event-section ul {
+  margin-top: 0;
+  color: inherit; 
+  opacity: 0.85; 
+  font-size: 15px;
+  line-height: 1.6; 
+}
+
+.event-section ul {
+  padding-left: 24px;
+}
+
+/* ========================= */
+/* CALL TO ACTION (CTA)      */
+/* ========================= */
+.cta {
+  margin-bottom: 25px;
+  padding: 12px;
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+}
+
+.cta-title {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.cta-text {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.4;
+}
+
+.cta a {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #007bff;
+  text-decoration: none;
+}
+
+/* ========================= */
+/* NEW RESULTS CARD          */
+/* ========================= */
+.result-card {
+  display: none; 
+  background: #ffffff;
+  padding: 24px 20px;
+  border-radius: 12px;
+  margin-top: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border-left: 6px solid #ff2b85; 
+}
+
+.greeting-text {
+  font-size: 20px;
+  font-weight: bold;
+  color: #222;
+  text-align: center;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.stats-grid {
+  display: flex;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.stat-box {
+  flex: 1;
+  padding: 16px 8px;
+  text-align: center;
+}
+
+.stat-box:first-child {
+  border-right: 1px solid #eaeaea;
+}
+
+.stat-label {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+// .stat-value.black { color: #333; }
+.stat-value.pink { color: #ff2b85; }
+
+.date-range {
+  background-color: #f4f6f9;
+  color: #666;
+  font-size: 13px;
+  text-align: center;
+  padding: 12px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px; 
+}
+
+.bonus-text {
+  text-align: center;
+  color: #555; /* 讓其餘的字變成深灰色 */
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 16px;
+}
+
+/* ========================= */
+/* UTILITIES & NOTICES       */
+/* ========================= */
+.loading,
+.error {
+  text-align: center;
+  display: none;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  color: #888888;
+  cursor: not-allowed;
+}
+
+.error {
+  color: red;
+}
+
+.notice-section {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.notice-section h3 {
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.notice-section ol {
+  padding-left: 20px;
+  color: #555;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.notice-section li {
+  margin-bottom: 10px;
+}
+
+/* ========================= */
+/* 📱 MOBILE OPTIMIZATION    */
+/* ========================= */
+@media (max-width: 600px) {
+  body {
+    padding: 0;
+    background: white;
+  }
+
+  .container {
+    max-width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 30px 16px 20px 16px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  button {
+    font-size: 16px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h2>foodpanda 準時率/超時率查詢器</h2>
+  
+  <div class="event-section">
+    <h4>💡更新時間：</h4>
+    <p>
+      每週 X XX:00 前更新，<span style="color: #ff2b85; font-weight: bold;">顯示截至【日期／時間】的資料</span>
+    </p>
+
+    <h4>🎯注意事項：</h4>
+    <ul>
+      <li>查詢結果為目前已完成更新之數據，<strong>非即時資料。</strong></li>
+      <li>系統使用人數較多時，查詢時間可能延長；若等待時間較久，可重新整理頁面後再次查詢。</li>
+      <li><strong>以上為週期中間參考資訊，最終結果依件數明細公布為準。</strong></li>
+    </ul>
+  </div>
+
+  <h3 style="margin-top:30px;">🔍 查詢準時率/超時率</h3>
+
+  <div class="search-box">
+    <input type="text" id="riderId" placeholder="請輸入foodpanda ID與身分證後三碼，即可查看最新表現。">
+    <button id="searchBtn" onclick="searchData()">查詢</button>
+  </div>
+
+
+  <!-- STATUS MESSAGES -->
+  <div id="loading" class="loading">查詢中，請稍候...</div>
+  <div id="error" class="error"></div>
+
+  <!-- NEW RESULTS CARD -->
+  <div id="card" class="result-card">
+    <div id="greeting" class="greeting-text">
+      <span id="riderIdDisplay"></span> <span id="riderName">夥伴</span> 你好👋
+    </div>
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-label">準時率</div>
+        <div id="onTimeRate" class="stat-value pink">0%</div> 
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">超時率</div>
+        <div id="overTimeRate" class="stat-value pink">0%</div> 
+      </div>
+    </div>
+
+    <div class="date-range">
+      ⏱ 資料區間：<span id="dataDateRange">YYYY-MM-DD – YYYY-MM-DD</span>
+    </div>
+    <div class="bonus-text" id="bonusText"></div>
+  </div>
+
+<!--
+  <div class="notice-section">
+    <h3>📋 注意事項</h3>
+    <ol>
+      <li>查詢器更新時間將於每日下午7點前更新。</li>
+      <li>如有疑問，請透過【接單系統(pandarider)>耳機圖示>幫助：活動/報酬/系統/其他】聯繫客服，類別選擇【活動/點數】-【活動】- 【其他活動】，並於標題說明【閱讀挑戰】。</li>
+      <li>中獎者請詳閱活動辦法並提供收件資料，獎項將以信件或以電話方式通知領取方式。倘寄出之獎項包裹如遭拒收、未領退件，恕不再次補寄。若有不可歸責於foodpanda之事由以致收件資料不全、不符、無法辨識、遺失等情形，恕無法通知補件。</li>
+      <li>依中華民國所得稅法規定，凡機會中獎之獎項價值超過新台幣$1,000元者，所得將列入個人年度綜合所得稅申報。若獎品價值超過新台幣$20,000元者，須繳納10%稅金；不具中華民國身分者或未在中華民國境內居住達183天之本國人，不論中獎金額，須就中獎所得扣獎20%機會中獎稅，然扣繳稅款未超過新台幣$2,000免扣繳（外國人不適用）。稅額以發票金額計算，由foodpanda依法代收，若中獎人未能如期依法繳納應繳稅額或提供相關文件，即視為放棄得獎資格及權益。</li>
+      <li>依據個人資料保護法規定，本活動所蒐集之個人資料，視為活動參加者瞭解及同意 <a href="https://pandarider.foodpanda.com.tw/otherPage/31" target="_blank">foodpanda隱私權政策條款</a>，由foodpanda針對本次活動需求進行蒐集、處理及利用（包含提供給辦理活動之第三方廠商、獎品寄送廠商等），該個人基本資料僅供本次活動使用，絕不作其他用途。</li>
+      <li>除foodpanda自家商品外，所有活動獎項依廠商實際發放現況為準。如對獎品瑕疵有疑義，請逕洽贈品原廠商，foodpanda不負獎品之任何維護或保固等瑕疵擔保責任。</li>
+      <li>foodpanda保留全權處理任何未頒發及未領取獎品之權利。如遇獎品缺貨或其他不可抗力事由以致獎品內容變更，foodpanda保留以其他價值相當之獎品替代原公布獎品之權利，恕不提供獎品轉讓、折現或轉換其他獎品之服務。</li>
+      <li>贈送獎品／電子票券獎品依廠商實際發放為準。</li>
+      <li>得獎者請於領獎申請截止時間內至活動領獎頁面完成領獎步驟，如未能於截止期間完成領獎步驟，視為中獎夥伴放棄領取，不再向 foodpanda 要求補領。</li>
+      <li>如有未盡事宜，依foodpanda最新公告為準。</li>
+    </ol>
+  </div> */
+-->
+
+</div>
+
+<script>
+// 👇 替換成你剛剛部署的 Google Apps Script Web App 網址 👇
+const API_URL = "https://script.google.com/macros/s/AKfycbwJZfa5GfkDbhRAz66DPVZ5IIrolqS0Ysp5F_zfit__z7yffIcUfoUikTT9Vfz84AlA-A/exec"; 
+
+async function searchData() {
+  const riderId = document.getElementById('riderId').value.trim();
+  const loading = document.getElementById('loading');
+  const error = document.getElementById('error');
+  const card = document.getElementById('card');
+  const searchBtn = document.getElementById('searchBtn');
+
+  if (!riderId) {
+    alert('請輸入 foodpanda ID 與身分證後三碼');
+    return;
+  }
+
+  // UI 狀態切換
+  searchBtn.disabled = true;
+  searchBtn.innerText = '查詢中...';
+  card.style.display = 'none';
+  error.style.display = 'none';
+  loading.style.display = 'block';
+
+  try {
+    // 向 Apps Script 發送 GET 請求
+    const response = await fetch(`${API_URL}?riderId=${riderId}`);
+    const json = await response.json();
+
+    loading.style.display = 'none';
+    searchBtn.disabled = false;
+    searchBtn.innerText = '查詢';
+
+    // 判斷後端回傳是否成功
+    if (!json.success) {
+      error.innerText = json.message; // 直接顯示後端傳來的乾淨錯誤訊息
+      error.style.display = 'block';
+      return;
+    }
+
+    const data = json.data;
+
+    // 更新 UI 數據
+    document.getElementById('riderIdDisplay').innerText = data[0].riderId;
+    document.getElementById('riderName').innerText = data[0].riderName + " ";
+    document.getElementById('onTimeRate').innerText = data[0].onTimeRate;
+    document.getElementById('overTimeRate').innerText = data[0].overTimeRate;
+    document.getElementById('dataDateRange').innerText = data[0].dateRange;
+
+    // 動態鼓勵語
+    const bonusTextElement = document.getElementById('bonusText');
+    if (data[0].onTimeRate.includes("查無")) {
+      bonusTextElement.innerHTML = '🎯 <span style="color: #ff2b85;">即刻上線接單累積活躍度</span>，解鎖更多獎勵機會！';
+    } else {
+      bonusTextElement.innerHTML = '🎯 <span style="color: #ff2b85;">提升活躍度數據表現</span>，解鎖更多獎勵機會！';
+    }
+
+    card.style.display = 'block';
+
+  } catch (err) {
+    // 網路斷線或其他嚴重錯誤
+    loading.style.display = 'none';
+    searchBtn.disabled = false;
+    searchBtn.innerText = '查詢';
+    error.innerText = '網路連線異常或系統無回應，請稍後再試。';
+    error.style.display = 'block';
+    console.error(err);
+  }
+}
+</script>
+
+</body>
+</html>
