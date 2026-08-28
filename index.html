@@ -340,6 +340,9 @@ button:disabled {
     <div class="date-range">
       ⏱ 資料區間：<span id="dataDateRange">YYYY-MM-DD – YYYY-MM-DD</span>
     </div>
+    <div class="average-stat-text">
+      💡你知道嗎？全平台外送夥伴準時率平均為 <strong id="avgOnTimeDisplay">XX %</strong> ｜超時率平均為 <strong id="avgOverTimeDisplay">XX %</strong>
+    </div>
     <div class="bonus-text" id="bonusText"></div>
   </div>
 
@@ -402,6 +405,11 @@ async function searchData() {
     document.getElementById('onTimeRate').innerText = data[0].onTimeRate;
     document.getElementById('overTimeRate').innerText = data[0].overTimeRate;
     document.getElementById('dataDateRange').innerText = data[0].dateRange;
+    // ⚡ 動態更新平均值
+    if (json.average) {
+      document.getElementById('avgOnTimeDisplay').innerText = json.average.onTime;
+      document.getElementById('avgOverTimeDisplay').innerText = json.average.overTime;
+    }
 
     // 動態鼓勵語
     const bonusTextElement = document.getElementById('bonusText');
