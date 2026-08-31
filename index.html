@@ -20,10 +20,10 @@ body {
   margin: 0;
   background-color: #f4f6f9;
   padding: 16px;
-  overflow-wrap: break-word; 
-  /* ⚡ 手機流暢滑動黑魔法 */
-  -webkit-overflow-scrolling: touch; 
-  transform: translateZ(0); 
+  overflow-wrap: break-word;
+  /* 👇 加入這兩行開啟手機硬體加速與順暢滑動 */
+  -webkit-overflow-scrolling: touch;
+  transform: translateZ(0);
 }
 
 .container {
@@ -36,24 +36,10 @@ body {
   box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
 
-/* ⚡ 新增：品牌 Logo 區塊 */
-.brand-header {
-  text-align: left;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.brand-header img {
-  height: 35px; /* 控制 Logo 大小 */
-  object-fit: contain;
-}
-
 h2 {
   text-align: center;
   color: #333;
   margin-bottom: 25px;
-  font-size: 22px;
 }
 
 h3 {
@@ -74,31 +60,31 @@ input[type="text"] {
   font-size: 16px;
   border: 1px solid #ddd;
   border-radius: 6px 0 0 6px;
-  max-width: 100%; 
+  max-width: 100%;
 }
 
 button {
   padding: 12px 18px;
   font-size: 16px;
-  background-color: #ff2b85; 
+  background-color: #ff2b85;
   color: white;
   border: none;
   border-radius: 0 6px 6px 0;
   cursor: pointer;
-  transition: background-color 0.2s ease; 
+  transition: background-color 0.2s ease;
 }
 
 button:hover {
-  background-color: #d81a67; 
+  background-color: #d81a67;
 }
 
 /* ========================= */
 /* EVENT DETAILS SECTION     */
 /* ========================= */
 .event-section {
-  background-color: rgba(255, 43, 133, 0.08); 
-  border-left: 4px solid #ff2b85; 
-  padding: 20px; 
+  background-color: rgba(255, 43, 133, 0.08);
+  border-left: 4px solid #ff2b85;
+  padding: 20px;
   margin-bottom: 30px;
   border-radius: 0 8px 8px 0;
 }
@@ -106,24 +92,24 @@ button:hover {
 .event-section h4 {
   margin-top: 20px;
   margin-bottom: 8px;
-  color: inherit; 
+  color: inherit;
   font-size: 16px;
-  display: flex; 
+  display: flex;
   align-items: center;
-  gap: 8px; 
+  gap: 8px;
 }
 
 .event-section h4:first-of-type {
   margin-top: 24px;
 }
 
-.event-section p, 
+.event-section p,
 .event-section ul {
   margin-top: 0;
-  color: inherit; 
-  opacity: 0.85; 
+  color: inherit;
+  opacity: 0.85;
   font-size: 15px;
-  line-height: 1.6; 
+  line-height: 1.6;
 }
 
 .event-section ul {
@@ -131,17 +117,48 @@ button:hover {
 }
 
 /* ========================= */
+/* CALL TO ACTION (CTA)      */
+/* ========================= */
+.cta {
+  margin-bottom: 25px;
+  padding: 12px;
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+}
+
+.cta-title {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.cta-text {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.4;
+}
+
+.cta a {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #007bff;
+  text-decoration: none;
+}
+
+/* ========================= */
 /* NEW RESULTS CARD          */
 /* ========================= */
 .result-card {
-  display: none; 
+  display: none;
   background: #ffffff;
   padding: 24px 20px;
   border-radius: 12px;
   margin-top: 20px;
   margin-bottom: 25px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-  border-left: 6px solid #ff2b85; 
+  border-left: 6px solid #ff2b85;
 }
 
 .greeting-text {
@@ -193,26 +210,7 @@ button:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px; 
-}
-
-/* 💡 升級版的平均數據提示樣式 */
-.average-stat-text {
-  background-color: #fff4f8; 
-  border: 1px dashed #ffccde; 
-  color: #555;
-  font-size: 13.5px;
-  text-align: center;
-  padding: 12px;
-  border-radius: 8px;
-  margin-top: 16px;
-  line-height: 1.6;
-}
-
-.average-stat-text strong {
-  color: #ff2b85; 
-  font-size: 15px;
-  margin: 0 2px;
+  gap: 6px;
 }
 
 .bonus-text {
@@ -245,6 +243,48 @@ button:disabled {
   color: red;
 }
 
+.notice-section {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.notice-section h3 {
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.notice-section ol {
+  padding-left: 20px;
+  color: #555;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.notice-section li {
+  margin-bottom: 10px;
+}
+
+/* 💡 升級版的平均數據提示樣式 */
+.average-stat-text {
+  background-color: #fff4f8; /* 極淺的粉紅底色 */
+  border: 1px dashed #ffccde; /* 柔和的粉紅虛線邊框 */
+  color: #555;
+  font-size: 13.5px;
+  text-align: center;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 16px;
+  line-height: 1.6;
+}
+
+/* 讓平均值的數字也變成專屬粉紅色並稍微放大 */
+.average-stat-text strong {
+  color: #ff2b85;
+  font-size: 15px;
+  margin: 0 2px;
+}
+
 /* ========================= */
 /* 📱 MOBILE OPTIMIZATION    */
 /* ========================= */
@@ -258,7 +298,15 @@ button:disabled {
     max-width: 100%;
     border-radius: 0;
     box-shadow: none;
-    padding: 20px 16px;
+    padding: 30px 16px 20px 16px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  button {
+    font-size: 16px;
   }
 }
 </style>
@@ -268,12 +316,8 @@ button:disabled {
 
 <div class="container">
 
-  <div class="brand-header">
-    <img src="https://pandarider.foodpanda.com.tw/assets/img/logo_pink.svg" alt="foodpanda">
-  </div>
+  <h2>foodpanda 準時率/超時率查詢器</h2>
 
-  <h2>準時率/超時率查詢器</h2>
-  
   <div class="event-section">
     <h4>💡更新時間：</h4>
     <p>
@@ -295,9 +339,12 @@ button:disabled {
     <button id="searchBtn" onclick="searchData()">查詢</button>
   </div>
 
+
+  <!-- STATUS MESSAGES -->
   <div id="loading" class="loading">查詢中，請稍候...</div>
   <div id="error" class="error"></div>
 
+  <!-- NEW RESULTS CARD -->
   <div id="card" class="result-card">
     <div id="greeting" class="greeting-text">
       <span id="riderIdDisplay"></span> <span id="riderName">夥伴</span> 你好👋
@@ -305,11 +352,11 @@ button:disabled {
     <div class="stats-grid">
       <div class="stat-box">
         <div class="stat-label">準時率</div>
-        <div id="onTimeRate" class="stat-value pink">0%</div> 
+        <div id="onTimeRate" class="stat-value pink">0%</div>
       </div>
       <div class="stat-box">
         <div class="stat-label">超時率</div>
-        <div id="overTimeRate" class="stat-value pink">0%</div> 
+        <div id="overTimeRate" class="stat-value pink">0%</div>
       </div>
     </div>
 
@@ -327,7 +374,7 @@ button:disabled {
 
 <script>
 // API 網址維持不變
-const API_URL = "https://script.google.com/macros/s/AKfycbwJZfa5GfkDbhRAz66DPVZ5IIrolqS0Ysp5F_zfit__z7yffIcUfoUikTT9Vfz84AlA-A/exec"; 
+const API_URL = "https://script.google.com/macros/s/AKfycbwJZfa5GfkDbhRAz66DPVZ5IIrolqS0Ysp5F_zfit__z7yffIcUfoUikTT9Vfz84AlA-A/exec";
 
 async function searchData() {
   const riderId = document.getElementById('riderId').value.trim();
@@ -349,38 +396,46 @@ async function searchData() {
   loading.style.display = 'block';
 
   try {
+    // 1. 向 Apps Script 發送 GET 請求
     const response = await fetch(`${API_URL}?riderId=${riderId}`);
+
+    // 2. ⚡ 關鍵防護：先不要直接轉 JSON，先轉成純文字檢查！
     const rawText = await response.text();
-    
+
+    // 3. 如果回傳的內容是 HTML (例如 Google 登入頁面或錯誤頁面)
     if (rawText.trim().startsWith('<')) {
       throw new Error("伺服器連線擁擠，請稍後再試！");
     }
 
+    // 4. 確認是正常的資料後，才解析成 JSON
     const json = JSON.parse(rawText);
 
     loading.style.display = 'none';
     searchBtn.disabled = false;
     searchBtn.innerText = '查詢';
 
+    // 判斷後端回傳是否成功
     if (!json.success) {
-      error.innerText = json.message;
+      error.innerText = json.message; // 直接顯示後端傳來的乾淨錯誤訊息
       error.style.display = 'block';
       return;
     }
 
     const data = json.data;
 
+    // 更新 UI 數據
     document.getElementById('riderIdDisplay').innerText = data[0].riderId;
     document.getElementById('riderName').innerText = data[0].riderName + " ";
     document.getElementById('onTimeRate').innerText = data[0].onTimeRate;
     document.getElementById('overTimeRate').innerText = data[0].overTimeRate;
     document.getElementById('dataDateRange').innerText = data[0].dateRange;
-    
+    // ⚡ 動態更新平均值
     if (json.average) {
       document.getElementById('avgOnTimeDisplay').innerText = json.average.onTime;
       document.getElementById('avgOverTimeDisplay').innerText = json.average.overTime;
     }
 
+    // 動態鼓勵語
     const bonusTextElement = document.getElementById('bonusText');
     if (data[0].onTimeRate.includes("查無")) {
       bonusTextElement.innerHTML = '🎯 <span style="color: #ff2b85;">即刻上線接單累積活躍度</span>，解鎖更多獎勵機會！';
@@ -391,11 +446,15 @@ async function searchData() {
     card.style.display = 'block';
 
   } catch (err) {
+    // 網路斷線或其他嚴重錯誤
     loading.style.display = 'none';
     searchBtn.disabled = false;
     searchBtn.innerText = '查詢';
+
+    // 把錯誤原因印在畫面上 (已過濾掉醜醜的代碼)
     error.innerText = err.message || '系統連線異常，請重新整理頁面再試一次。';
     error.style.display = 'block';
+
     console.error("詳細錯誤：", err);
   }
 }
