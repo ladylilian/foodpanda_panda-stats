@@ -21,6 +21,9 @@ body {
   background-color: #f4f6f9;
   padding: 16px;
   overflow-wrap: break-word; 
+  /* 👇 加入這兩行開啟手機硬體加速與順暢滑動 */
+  -webkit-overflow-scrolling: touch; 
+  transform: translateZ(0); 
 }
 
 .container {
