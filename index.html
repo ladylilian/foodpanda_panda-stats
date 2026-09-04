@@ -321,7 +321,7 @@ button:disabled {
   <div class="event-section">
     <h4>💡更新時間：</h4>
     <p>
-      每週 X XX:00 前更新，<span style="color: #ff2b85; font-weight: bold;">顯示截至【日期／時間】的資料</span>
+      每週二、五 19:00 前更新
     </p>
 
     <h4>🎯注意事項：</h4>
@@ -363,10 +363,10 @@ button:disabled {
     <div class="date-range">
       ⏱ 資料區間：<span id="dataDateRange">YYYY-MM-DD – YYYY-MM-DD</span>
     </div>
-    <div class="average-stat-text">
+    <!-- <div class="average-stat-text">
       💡 <strong>你知道嗎？</strong><br>
       全平台外送夥伴準時率平均為 <strong id="avgOnTimeDisplay">XX %</strong> ｜ 超時率平均為 <strong id="avgOverTimeDisplay">XX %</strong>
-    </div>
+    </div> -->
     <div class="bonus-text" id="bonusText"></div>
   </div>
 
@@ -430,10 +430,10 @@ async function searchData() {
     document.getElementById('overTimeRate').innerText = data[0].overTimeRate;
     document.getElementById('dataDateRange').innerText = data[0].dateRange;
     // ⚡ 動態更新平均值
-    if (json.average) {
-      document.getElementById('avgOnTimeDisplay').innerText = json.average.onTime;
-      document.getElementById('avgOverTimeDisplay').innerText = json.average.overTime;
-    }
+    // if (json.average) {
+    //   document.getElementById('avgOnTimeDisplay').innerText = json.average.onTime;
+    //   document.getElementById('avgOverTimeDisplay').innerText = json.average.overTime;
+    // }
 
     // 動態鼓勵語
     const bonusTextElement = document.getElementById('bonusText');
