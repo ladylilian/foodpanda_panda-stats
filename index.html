@@ -424,11 +424,22 @@ async function searchData() {
     const data = json.data;
 
     // 更新 UI 數據
+    // 建立一個小工具：把 0.69 變成 69%
+    const formatPercent = (val) => {
+      const num = parseFloat(val);
+      return !isNaN(num) ? Math.round(num * 100) + '%' : val;
+    };
+
+    // 更新 UI 數據
     document.getElementById('riderIdDisplay').innerText = data[0].riderId;
     document.getElementById('riderName').innerText = data[0].riderName + " ";
-    document.getElementById('onTimeRate').innerText = data[0].onTimeRate;
-    document.getElementById('overTimeRate').innerText = data[0].overTimeRate;
-    document.getElementById('dataDateRange').innerText = data[0].dateRange;
+    
+    // 套用百分比轉換
+    document.getElementById('onTimeRate').innerText = formatPercent(data[0].onTimeRate);
+    document.getElementById('overTimeRate').innerText = formatPercent(data[0].overTimeRate);
+    
+    // 修正 undefined 問題 (因為你的後端變數名稱是 dataRange，且放在 json 根目錄)
+    document.getElementById('dataDateRange').innerText = json.dataRange || "未提供區間";
     // ⚡ 動態更新平均值
     // if (json.average) {
     //   document.getElementById('avgOnTimeDisplay').innerText = json.average.onTime;
