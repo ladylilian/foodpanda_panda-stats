@@ -409,17 +409,7 @@ button:disabled {
     </div>
     <div class="bonus-text" id="bonusText"></div>
 
-    <div class="benefit-box">
-      <div class="benefit-title">🎉 維持目前表現，下期有機會解鎖</div>
-      <div>區間排行分流<span class="benefit-group">【第 1 組】</span>｜超早鳥優先區間</div>
-      <ul>
-        <li>優先於「每週四 09:00」選擇時段</li>
-        <li>個人達標活動資格</li>
-        <li>實體活動報名資格</li>
-        <li>多元特約優惠</li>
-        <li>點數挑戰賽</li>
-      </ul>
-    </div>
+    <div id="benefitBox" class="benefit-box"></div>
   </div>
 
 </div>
@@ -442,6 +432,14 @@ const CYCLE_BASE_UTC = Date.UTC(2026, 7, 31); // 2026/08/31（週一）為某一
 const CYCLE_DAYS = 14;
 const DAY_SWITCH_HOUR = 10;
 const DAY_MS = 86400000;
+
+// ===== 各組別福利說明（依 batch_sim 顯示）=====
+const GROUP_BENEFITS = {
+  '1': { zone: '超早鳥優先區間', items: ['優先於「每週四 09:00」選擇時段', '個人達標活動資格', '實體活動報名資格', '多元特約優惠'] },
+  '2': { zone: '早鳥優先區間',   items: ['優先於「每週四 15:00」選擇時段', '多元特約優惠'] },
+  '3': { zone: '基本區間',       items: ['可於「每週五 09:00」選擇時段', '多元特約優惠'] },
+  '4': { zone: '基本區間',       items: ['可於「每週五 15:00」選擇時段', '多元特約優惠'] }
+};
 
 let isSearching = false;
 
@@ -651,6 +649,19 @@ async function searchData() {
       } else {
         bonusTextElement.innerHTML = '🎯 <span style="color: #ff2b85;">提升活躍度數據表現</span>，解鎖更多獎勵機會！';
       }
+    }
+
+    // 福利說明：第二天起依預測組別（batch_sim）顯示；週期第一天或無對應組別則隱藏
+    const benefitBox = document.getElementById('benefitBox');
+    const simKey = String(row.batchSim === undefined || row.batchSim === null ? '' : row.batchSim).replace(/[^0-9]/g, '');
+    const benefit = GROUP_BENEFITS[simKey];
+    if (!period.isFirstDay && benefit) {
+      benefitBox.innerHTML =
+        '<div>預測區間排行分流<span class="benefit-group">【第 ' + simKey + ' 組】</span>｜' + benefit.zone + '</div>' +
+        '<ul>' + benefit.items.map(t => '<li>' + t + '</li>').join('') + '</ul>';
+      benefitBox.style.display = 'block';
+    } else {
+      benefitBox.style.display = 'none';
     }
 
     card.style.display = 'block';
